@@ -10,7 +10,7 @@ const TOKEN = '';
 const GUILD_ID = '732194449664376883';
 const USER_ID = '360458101184528384';
 const TIMEZONE = 'Europe/Kiev';
-const START_DATE = new Date('2025-02-24T00:00:00');
+const START_DATE = new Date('2025-02-25T00:00:00');
 
 client.once('ready', () => {
     changeNickname();
