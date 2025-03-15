@@ -7,7 +7,7 @@ const client = new Client({
     presence: { status: 'idle' },
 });
 
-const TOKEN = 'MTM0ODU0NTE5MzgxMjU1Nzg2Ng.GmbAU9.Bbm-tSQ8GTN3K2zVWn6eUIwgD-mkQ-CbkN7oFc';
+const TOKEN = '';
 
 client.once('ready', () => {
     console.log('[INFO] Bot is ready.');
