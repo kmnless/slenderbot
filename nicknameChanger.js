@@ -8,7 +8,7 @@ const START_DATE = new Date('2025-02-24T00:00:00');
 async function changeNickname(client) {
     try {
         console.log('[INFO] Starting nickname change process...');
-        
+
         const guild = client.guilds.cache.get(GUILD_ID);
         if (!guild) {
             console.log('[WARNING] Guild not found. Aborting nickname change.');
@@ -21,7 +21,7 @@ async function changeNickname(client) {
             return;
         }
 
-        const newNick = `day ${calculateDayCounter()} waiting for Slenderman in DBD`;
+        const newNick = `день ${calculateDayCounter()} жду слендермена в дбд`;
         await member.setNickname(newNick);
         console.log(`[SUCCESS] Nickname changed to: ${newNick}`);
     } catch (error) {
@@ -36,17 +36,29 @@ async function changeNickname(client) {
 function calculateDayCounter() {
     const now = toZonedTime(new Date(), TIMEZONE);
     const startZoned = toZonedTime(START_DATE, TIMEZONE);
-    return Math.max(Math.floor((now - startZoned) / 86400000) + 1, 1);
+
+    const diff = Math.floor((now - startZoned) / 86400000) + 1;
+    return Math.max(diff, 1);
 }
 
-function scheduleNicknameChange(client) {
-    console.log('[INFO] Scheduling nickname change...');
-    changeNickname(client);
+function scheduleNextChange(client) {
+    console.log('[INFO] Scheduling next nickname change...');
+    const now = toZonedTime(new Date(), TIMEZONE);
+    const nextMidnight = new Date(now);
+    nextMidnight.setHours(24, 0, 0, 0);
 
-    setInterval(() => {
-        console.log('[INFO] 24 hours passed, attempting to change nickname again.');
+    const timeUntilNext = nextMidnight - now;
+    console.log(`[INFO] Next nickname change scheduled in ${timeUntilNext} ms.`);
+
+    setTimeout(() => {
+        console.log('[INFO] Triggering nickname change at midnight...');
         changeNickname(client);
-    }, 86400000);
+
+        setInterval(() => {
+            console.log('[INFO] 24 hours passed, attempting to change nickname again.');
+            changeNickname(client);
+        }, 86400000);
+    }, timeUntilNext);
 }
 
-module.exports = { scheduleNicknameChange };
+module.exports = { scheduleNextChange };

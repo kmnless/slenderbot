@@ -1,34 +1,25 @@
-const { Client, GatewayIntentBits, Collection } = require('discord.js');
-const { scheduleNicknameChange } = require('./nicknameChanger');
-const rollCommand = require('./rollCommand');
+const { Client, GatewayIntentBits } = require('discord.js');
+const { scheduleNextChange } = require('./nicknameChanger');
+const { handleRollCommand } = require('./rollCommand');
 
 const client = new Client({
-    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],
+    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildMessages],
     presence: { status: 'idle' },
 });
 
-const TOKEN = '';
-
-client.commands = new Collection();
-client.commands.set(rollCommand.data.name, rollCommand);
+const TOKEN = 'MTM0ODU0NTE5MzgxMjU1Nzg2Ng.GmbAU9.Bbm-tSQ8GTN3K2zVWn6eUIwgD-mkQ-CbkN7oFc';
 
 client.once('ready', () => {
     console.log('[INFO] Bot is ready.');
-    scheduleNicknameChange(client);
+    scheduleNextChange(client);
 });
 
-client.on('interactionCreate', async interaction => {
-    if (!interaction.isChatInputCommand()) return;
+client.on('interactionCreate', async (interaction) => {
+    if (!interaction.isCommand()) return;
 
-    const command = client.commands.get(interaction.commandName);
-    if (command) {
-        try {
-            await command.execute(interaction);
-        } catch (error) {
-            console.error(`[ERROR] Command execution failed: ${error.message}`);
-            await interaction.reply({ content: 'An error occurred while executing the command.', ephemeral: true });
-        }
+    if (interaction.commandName === 'roll') {
+        await handleRollCommand(interaction);
     }
 });
 
-client.login(TOKEN).catch(err => console.error(`[ERROR] Authorization failed: ${err.message}`));
+client.login(TOKEN).catch((err) => console.error(`[ERROR] Authorization error: ${err.message}`));
