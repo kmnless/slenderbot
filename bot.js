@@ -1,5 +1,5 @@
 const { Client, GatewayIntentBits } = require('discord.js');
-const { scheduleNextChange } = require('./nicknameChanger');
+const { scheduleNextChange, changeNickname } = require('./nicknameChanger');
 const { handleRollCommand } = require('./rollCommand');
 
 const client = new Client({
@@ -9,8 +9,9 @@ const client = new Client({
 
 const TOKEN = '';
 
-client.once('ready', () => {
+client.once('ready', async () => {
     console.log('[INFO] Bot is ready.');
+    await changeNickname(client);
     scheduleNextChange(client);
 });
 

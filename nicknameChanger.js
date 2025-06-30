@@ -18,7 +18,7 @@ async function changeNickname(client) {
         }
 
         const slendermember = await guild.members.fetch(USER_ID).catch(() => null);
-        if (!slendermembermember) {
+        if (!slendermember) {
             console.log('[WARNING] SlenderMember not found. Aborting nickname change.');
             return;
         }
@@ -27,8 +27,8 @@ async function changeNickname(client) {
         await slendermember.setNickname(newSlenderNick);
         console.log(`[SUCCESS] SlenderUserName changed to: ${newSlenderNick}`);
 
-        const banmember = await guild.members.fetch(USER_ID).catch(() => null);
-        if (!slendermembermember) {
+        const banmember = await guild.members.fetch(USER_ID_EVGENIY).catch(() => null);
+        if (!banmember) {
             console.log('[WARNING] BanMember not found. Aborting nickname change.');
             return;
         }
@@ -49,7 +49,6 @@ async function changeNickname(client) {
 function calculateDayCounter(date) {
     const now = toZonedTime(new Date(), TIMEZONE);
     const startZoned = toZonedTime(date, TIMEZONE);
-
     const diff = Math.floor((now - startZoned) / 86400000) + 1;
     return Math.max(diff, 1);
 }
@@ -74,4 +73,4 @@ function scheduleNextChange(client) {
     }, timeUntilNext);
 }
 
-module.exports = { scheduleNextChange };
+module.exports = { scheduleNextChange, changeNickname };
