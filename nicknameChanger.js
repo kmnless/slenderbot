@@ -2,8 +2,10 @@ const { toZonedTime } = require('date-fns-tz');
 
 const GUILD_ID = '732194449664376883';
 const USER_ID = '360458101184528384';
+const USER_ID_EVGENIY = '1361428879876817079';
 const TIMEZONE = 'Europe/Kiev';
-const START_DATE = new Date('2025-02-24T00:00:00');
+const START_DATE_SLENDERMAN = new Date('2025-02-24T00:00:00');
+const START_DATE_BAN = new Date('2025-04-14T00:00:00');
 
 async function changeNickname(client) {
     try {
@@ -15,15 +17,26 @@ async function changeNickname(client) {
             return;
         }
 
-        const member = await guild.members.fetch(USER_ID).catch(() => null);
-        if (!member) {
-            console.log('[WARNING] Member not found. Aborting nickname change.');
+        const slendermember = await guild.members.fetch(USER_ID).catch(() => null);
+        if (!slendermembermember) {
+            console.log('[WARNING] SlenderMember not found. Aborting nickname change.');
             return;
         }
 
-        const newNick = `день ${calculateDayCounter()} жду слендермена в дбд`;
-        await member.setNickname(newNick);
-        console.log(`[SUCCESS] Nickname changed to: ${newNick}`);
+        const newSlenderNick = `день ${calculateDayCounter(START_DATE_SLENDERMAN)} жду слендермена в дбд`;
+        await slendermember.setNickname(newSlenderNick);
+        console.log(`[SUCCESS] SlenderUserName changed to: ${newSlenderNick}`);
+
+        const banmember = await guild.members.fetch(USER_ID).catch(() => null);
+        if (!slendermembermember) {
+            console.log('[WARNING] BanMember not found. Aborting nickname change.');
+            return;
+        }
+
+        const newBanNick = `${calculateDayCounter(START_DATE_BAN)} дней без бана`;
+        await banmember.setNickname(newBanNick);
+        console.log(`[SUCCESS] BanUserName changed to: ${newBanNick}`);
+
     } catch (error) {
         if (error.code !== 50013) {
             console.error(`[ERROR] ${error.message}`);
@@ -33,9 +46,9 @@ async function changeNickname(client) {
     }
 }
 
-function calculateDayCounter() {
+function calculateDayCounter(date) {
     const now = toZonedTime(new Date(), TIMEZONE);
-    const startZoned = toZonedTime(START_DATE, TIMEZONE);
+    const startZoned = toZonedTime(date, TIMEZONE);
 
     const diff = Math.floor((now - startZoned) / 86400000) + 1;
     return Math.max(diff, 1);

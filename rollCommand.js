@@ -4,7 +4,7 @@ async function handleRollCommand(interaction) {
 
     const args = interaction.options.getString('range');
     if (args) {
-        const values = args.split(' ').map(Number).filter((num) => !isNaN(num));
+        const values = args.trim().split(/\s+/).map(Number).filter((num) => !isNaN(num));
 
         if (values.length === 1) {
             max = values[0];
@@ -15,7 +15,7 @@ async function handleRollCommand(interaction) {
     }
 
     if (min >= max) {
-        return interaction.reply({ content: 'Invalid range. Make sure min < max.', ephemeral: true });
+        return interaction.reply({ content: 'DOLBOEB!! Min > Max', ephemeral: true });
     }
 
     const rollResult = Math.floor(Math.random() * (max - min + 1)) + min;
